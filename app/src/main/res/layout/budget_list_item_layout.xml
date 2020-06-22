@@ -76,30 +76,6 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="end">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="@dimen/di5dp"
-                    android:text="@string/money_rest"
-                    android:textSize="@dimen/di12dp" />
-
-                <TextView
-                    android:id="@+id/textView_MoneyRest_Budget"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="end"
-                    android:textColor="@color/colorLightBlue"
-                    android:paddingLeft="@dimen/di5dp"
-                    android:paddingTop="@dimen/di5dp"
-                    android:textSize="@dimen/di12dp" />
-
-            </LinearLayout>
-
         </LinearLayout>
 
     </LinearLayout>

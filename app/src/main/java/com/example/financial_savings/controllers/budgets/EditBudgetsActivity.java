@@ -18,6 +18,7 @@ import com.example.financial_savings.entities.NganSach;
 import com.example.financial_savings.helper.DBHelper;
 import com.example.financial_savings.interfaces.IMappingView;
 import com.example.financial_savings.modules.checks.CheckEmptyModule;
+import com.example.financial_savings.modules.dates.DateDisplayModule;
 import com.example.financial_savings.modules.dates.DateGetStringModule;
 import com.example.financial_savings.modules.formats.DateFormatModule;
 import com.example.financial_savings.modules.formats.FormatMoneyModule;
@@ -25,6 +26,7 @@ import com.example.financial_savings.sessions.Session;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 public class EditBudgetsActivity extends AppCompatActivity implements IMappingView {
     private Button buttonSave;
@@ -54,12 +56,16 @@ public class EditBudgetsActivity extends AppCompatActivity implements IMappingVi
             @Override
             public void onClick(View v) {
                 String money = editTextMoney.getText().toString().replace(",", "");
-                if(CheckEmptyModule.isEmpty(money, money, money)) {
+                String dateStr = editTextDate.getText().toString();
+
+                if(CheckEmptyModule.isEmpty(money, dateStr, money)) {
+                    java.sql.Date sqlStart = DateFormatModule.getDateSQL(DateDisplayModule.getDateByDisplay(timeStart));
+                    java.sql.Date sqlEnd = DateFormatModule.getDateSQL(DateDisplayModule.getDateByDisplay(timeEnd));
                     if(money.length() > 3 && money.substring(money.length() - 3).equals("000")) {
                         if(Double.parseDouble(money) >= 300000) {
-                            Date sqlStart = DateFormatModule.getDateSQL(timeStart);
-                            Date sqlEnd = DateFormatModule.getDateSQL(timeEnd);
-                            handlingSave(sqlStart, sqlEnd, money);
+                            if(checkdate(sqlStart.toString(),sqlEnd.toString())){
+                                handlingSave(sqlStart, sqlEnd, money);
+                            } else Toast.makeText(getApplicationContext(), R.string.condition_timee, Toast.LENGTH_SHORT).show();
                         } else Toast.makeText(getApplicationContext(), R.string.condition_money, Toast.LENGTH_SHORT).show();
                     } else Toast.makeText(getApplicationContext(), R.string.invalid_money, Toast.LENGTH_SHORT).show();
                 } else Toast.makeText(getApplicationContext(), R.string.empty_info, Toast.LENGTH_SHORT).show();
@@ -76,6 +82,18 @@ public class EditBudgetsActivity extends AppCompatActivity implements IMappingVi
         Toast.makeText(getApplicationContext(), R.string.success_budget_edit, Toast.LENGTH_SHORT).show();
     }
 
+    private boolean checkdate(String sqlStart, String sqlEnd){
+        ArrayList<NganSach> all = dbHelper.getAll_NganSach();
+        for(int i = 0; i < all.size(); i++){
+            if(nganSach.getNgayBatDau().toString().equals(sqlStart) && nganSach.getNgayKetThuc().toString().equals(sqlEnd)) {
+                return true;
+            }
+            else if(all.get(i).getNgayBatDau().toString().equals(sqlStart) && all.get(i).getNgayKetThuc().toString().equals(sqlEnd)){
+                return false;
+            }
+        }
+        return true;
+    }
     private void eventChooseDate() {
         editTextDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,10 +106,10 @@ public class EditBudgetsActivity extends AppCompatActivity implements IMappingVi
 
     @SuppressLint("SetTextI18n")
     private void loadData() {
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         idBudgets = getIntent().getExtras().getString("idBudgets");
         if(!idBudgets.isEmpty() && idBudgets != null) {
             nganSach = dbHelper.getByID_NganSach(idBudgets);
-            @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
             editTextMoney.setText(FormatMoneyModule.formatAmount(nganSach.getSoTien()));
             editTextDate.setText(formatter.format(nganSach.getNgayBatDau()) + " - " + formatter.format(nganSach.getNgayKetThuc()));
         }
@@ -111,6 +129,9 @@ public class EditBudgetsActivity extends AppCompatActivity implements IMappingVi
             timeEnd = DateGetStringModule.getDayEndByNameTime(nameTime);
         }
         else {
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+            timeStart = formatter.format(nganSach.getNgayBatDau());
+            timeEnd = formatter.format(nganSach.getNgayKetThuc());
             editTextDate.setHint(R.string.choosetime);
         }
     }

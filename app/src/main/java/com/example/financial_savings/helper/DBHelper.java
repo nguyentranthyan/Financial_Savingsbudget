@@ -176,6 +176,14 @@ public class DBHelper extends SQLiteOpenHelper {
         return nganSachDAO.getByID(db, id);
     }
 
+    public NganSach getBydatestart_NganSach(String datestart) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return nganSachDAO.getBydatestart(db, datestart);
+    }
+    public NganSach getBydateend_NganSach(String dateend) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return nganSachDAO.getBydateend(db, dateend);
+    }
     public ArrayList<NganSach> getAll_NganSach() {
         SQLiteDatabase db = this.getWritableDatabase();
         return nganSachDAO.getAll(db);

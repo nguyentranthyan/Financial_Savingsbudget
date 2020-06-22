@@ -16,6 +16,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.example.financial_savings.R;
 import com.example.financial_savings.controllers.budgets.DetailBudgetsActivity;
+import com.example.financial_savings.controllers.budgets.SeeTransBudgetsActivity;
 import com.example.financial_savings.controllers.transactions.DetailTransactionActivity;
 import com.example.financial_savings.entities.DanhMuc;
 import com.example.financial_savings.entities.SoGiaoDich;
@@ -24,12 +25,11 @@ import com.example.financial_savings.entities.TietKiem;
 import com.example.financial_savings.entities.ViCaNhan;
 import com.example.financial_savings.helper.DBHelper;
 import com.example.financial_savings.modules.checks.CheckPropertyRepeatModule;
-import com.example.financial_savings.modules.randoms.RandomIDModule;
 import com.example.financial_savings.templates.transactions.add_transaction.EventSaveTemplate;
 
 import java.sql.Date;
 
-public class NotifierAlarm_Repeat extends BroadcastReceiver {
+public class NotifierAlarm_budget extends BroadcastReceiver {
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
@@ -39,15 +39,9 @@ public class NotifierAlarm_Repeat extends BroadcastReceiver {
         String id = intent.getStringExtra("id");
         String title = intent.getStringExtra("title");
         String message = intent.getStringExtra("message");
-        String dateNew = intent.getStringExtra("dateNew");
 
-        SoGiaoDich soGiaoDich = dbHelper.getByID_SoGiaoDich(id);
-
-        SoGiaoDich soGiaoDichNew = new SoGiaoDich();
-        String idNew = RandomIDModule.getTransID(dbHelper);
-
-        Intent intent1 = new Intent(context, DetailTransactionActivity.class);
-        intent1.putExtra("idTrans", idNew);
+        Intent intent1 = new Intent(context, DetailBudgetsActivity.class);
+        intent1.putExtra("idBudgets", id);
         intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(context);
@@ -60,7 +54,7 @@ public class NotifierAlarm_Repeat extends BroadcastReceiver {
 
         NotificationChannel channel = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            channel = new NotificationChannel("my_channel_01","notification", NotificationManager.IMPORTANCE_HIGH);
+            channel = new NotificationChannel("my_channel_01", "notification", NotificationManager.IMPORTANCE_HIGH);
         }
 
         Notification notification = builder.setContentTitle(title)

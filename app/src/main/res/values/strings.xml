@@ -353,6 +353,7 @@
     <string name="condition_time">Khoảng thời gian tối thiểu cho chi tiêu là 7 ngày.</string>
     <string name="condition_money">Số tiền tối thiểu cho chi tiêu là 300,000 VND.</string>
     <string name="condition_times">Ngày kết thúc phải sau ngày bắt đầu.</string>
+    <string name="condition_timee">Thời gian lập chi tiêu đã tồn tại</string>
 
     <!--budget_edit-->
     <string name="budget_edit">Chỉnh sửa chi tiêu</string>
@@ -363,6 +364,7 @@
     <string name="money_everyday">Số tiền nên chi mỗi ngày</string>
     <string name="money_expected">Tổng tiền dự kiến sẽ chi</string>
     <string name="money_reality">Số tiền thực tế đã chi mỗi ngày</string>
+    <string name="excessiveamount">số tiền vượt mức</string>
 
     <!--savings_home-->
     <string name="savings_home">Tiết kiệm</string>

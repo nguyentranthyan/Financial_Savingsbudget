@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.financial_savings.R;
 import com.example.financial_savings.entities.ChiTietNganSach;
 import com.example.financial_savings.entities.NganSach;
+import com.example.financial_savings.entities.SoGiaoDich;
 import com.example.financial_savings.helper.DBHelper;
 import com.example.financial_savings.interfaces.IMappingView;
 import com.example.financial_savings.modules.alerts.AlertConfirmModule;
@@ -30,7 +31,7 @@ import java.util.Date;
 public class DetailBudgetsActivity extends AppCompatActivity implements IMappingView{
     private Button buttonSeeTrans;
     private ImageButton buttonCancel, buttonEdit, buttonDelete;
-    private TextView editTextDate, editTextMoney, moneyEveryDate, expectedmoneyspent, actualspending, editTextDayRest;
+    private TextView editTextDate, editTextMoney, money_rest,moneyEveryDate, expectedmoneyspent, actualspending, editTextDayRest,excessiveamount;
     private DBHelper dbHelper;
     private NganSach nganSach;
     private String idBudgets;
@@ -114,6 +115,25 @@ public class DetailBudgetsActivity extends AppCompatActivity implements IMapping
             int moneyspending = (totalMoneyExpenses / songaydachi);
             int expectMoneySpent = moneyspending * tongsongay;
 
+            String moneyrest = FormatMoneyModule.formatAmount(MoneyBudgetModule.getMoneyRestBudget(dbHelper, nganSach));
+
+            int tongtien=0;
+            ArrayList<ChiTietNganSach> listbudget = dbHelper.getByIDBudget_ChiTietNganSach(nganSach.getMaNganSach());
+            for (int i1 = 0; i1 < listbudget.size(); i1++) {
+                SoGiaoDich giaoDich = dbHelper.getByID_SoGiaoDich(listbudget.get(i1).getMaGiaoDich());
+                int tien = (int) giaoDich.getSoTien();
+                tongtien += tien;
+
+            }
+            if(nganSach.getSoTien()<tongtien){
+                excessiveamount.setText(moneyrest+"VND");
+                money_rest.setText("0");
+            }
+            else{
+                excessiveamount.setText("0");
+                money_rest.setText(moneyrest+"VND");
+            }
+
             editTextDayRest.setText("Còn lại " + songayconlai + " ngày");
 
             //so tien nen chi moi ngay = tổng số tiền còn lại chia số ngày còn lai
@@ -159,6 +179,8 @@ public class DetailBudgetsActivity extends AppCompatActivity implements IMapping
         editTextDate = findViewById(R.id.editTextDate_Budgets_detail);
         editTextDayRest = findViewById(R.id.editTextDayRest_Budgets_detail);
         moneyEveryDate = findViewById(R.id.moneyEveryDate);
+        money_rest=findViewById(R.id.money_rest);
+        excessiveamount=findViewById(R.id.excessiveamount);
         expectedmoneyspent = findViewById(R.id.Expectedmoneyspent);
         actualspending = findViewById(R.id.actualspending);
         dbHelper = new DBHelper(this);

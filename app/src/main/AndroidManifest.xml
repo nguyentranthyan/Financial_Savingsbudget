@@ -99,6 +99,7 @@
         <receiver android:name=".notifications.NotifierAlarm_Remind"/>
         <receiver android:name=".notifications.NotifierAlarm_Repeat"/>
         <receiver android:name=".notifications.NotifierAlarm_First"/>
+        <receiver android:name=".notifications.NotifierAlarm_budget"/>
 
     </application>
 

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ import com.example.financial_savings.entities.ViCaNhan;
 import com.example.financial_savings.helper.DBHelper;
 import com.example.financial_savings.modules.alarms.AlarmRemindModule;
 import com.example.financial_savings.modules.alarms.AlarmRepeatModule;
+import com.example.financial_savings.modules.alarms.AlarmbudgetModule;
 import com.example.financial_savings.modules.checks.CheckEmptyModule;
 import com.example.financial_savings.modules.checks.CheckPropertyRepeatModule;
 import com.example.financial_savings.modules.dates.DateDisplayModule;
@@ -323,10 +325,12 @@ public class EventSaveTemplate {
                         Calendar calendar = Calendar.getInstance();
                         calendar.setTime(now);
                         int year=calendar.get(Calendar.YEAR);
-                        int month=calendar.get(Calendar.MONTH);
+                        int month=calendar.get(Calendar.MONTH)+1;
                         int date=calendar.get(Calendar.DAY_OF_MONTH);
                         String dateStr=year+"-"+month+"-"+date;
-                        AlarmRepeatModule.handlingAlarmRepeat_Date_budget(java.sql.Date.valueOf(dateStr), activity, soGiaoDich, dbHelper);
+                        Log.d("time", tongtien+"");
+                        Log.d("money", nganSach.getSoTien()+"");
+                        AlarmbudgetModule.handlingAlarmRepeat_Date_budget(java.sql.Date.valueOf(dateStr), activity, nganSach, dbHelper);
                     }
                 }
             }

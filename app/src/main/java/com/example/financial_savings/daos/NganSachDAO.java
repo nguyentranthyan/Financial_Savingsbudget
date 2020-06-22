@@ -44,7 +44,26 @@ public class NganSachDAO implements ICRUD<NganSach> {
         cursor.close();
         return nganSach;
     }
-
+    public NganSach getBydatestart(SQLiteDatabase db, String datestart) {
+        String query = "select * from " + TABLE_NAME + " where " + DATE_START + " like '%" + datestart + "'";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor != null)
+            cursor.moveToFirst();
+        NganSach nganSach = new NganSach(cursor.getString(0), cursor.getDouble(1),
+                Date.valueOf(cursor.getString(2)), Date.valueOf(cursor.getString(3)));
+        cursor.close();
+        return nganSach;
+    }
+    public NganSach getBydateend(SQLiteDatabase db, String dateend) {
+        String query = "select * from " + TABLE_NAME + " where " + DATE_END + " like '%" + dateend + "'";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor != null)
+            cursor.moveToFirst();
+        NganSach nganSach = new NganSach(cursor.getString(0), cursor.getDouble(1),
+                Date.valueOf(cursor.getString(2)), Date.valueOf(cursor.getString(3)));
+        cursor.close();
+        return nganSach;
+    }
     @Override
     public ArrayList<NganSach> getAll(SQLiteDatabase db) {
         ArrayList<NganSach> list = new ArrayList<>();

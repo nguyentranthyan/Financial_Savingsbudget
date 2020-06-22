@@ -33,15 +33,13 @@ public class BudgetDisplayModule {
             hashMap.put("listView_goal", FormatMoneyModule.formatAmount(list.get(i).getSoTien()) + " VND");
             hashMap.put("listView_money_use", FormatMoneyModule.formatAmount
                     (MoneyBudgetModule.getMoneyUseBudget(dbHelper, list.get(i))) + " VND");
-            hashMap.put("listView_money_rest", FormatMoneyModule.formatAmount(
-                    MoneyBudgetModule.getMoneyRestBudget(dbHelper, list.get(i))) + " VND");
             hashMap.put("image", String.valueOf(R.drawable.ic_markunread_mailbox_black_24dp));
             mapList.add(hashMap);
         }
 
-        String[] from = {"image", "listView_date", "listView_goal", "listView_money_use", "listView_money_rest"};
+        String[] from = {"image", "listView_date", "listView_goal", "listView_money_use"};
         int[] to = {R.id.imageView_Budget, R.id.textView_Date_Budget, R.id.textView_Goal_Budget,
-                R.id.textView_MoneyUse_Budget, R.id.textView_MoneyRest_Budget};
+                R.id.textView_MoneyUse_Budget};
 
         SimpleAdapter simpleAdapter = new SimpleAdapter(context, mapList, R.layout.budget_list_item_layout, from, to);
         listView.setAdapter(simpleAdapter);

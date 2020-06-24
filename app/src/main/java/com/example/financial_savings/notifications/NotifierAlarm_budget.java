@@ -74,15 +74,4 @@ public class NotifierAlarm_budget extends BroadcastReceiver {
         }
         notificationManager.notify(1, notification);
     }
-
-    private void saveTransNewRepeat(DBHelper dbHelper, SoGiaoDich soGiaoDich, Date dateNew, Context activity, String idNew, SoGiaoDich soGiaoDichNew) {
-        DanhMuc danhMuc = dbHelper.getByID_DanhMuc(soGiaoDich.getMaDanhMuc());
-        ViCaNhan viCaNhan = CheckPropertyRepeatModule.checkWallet(soGiaoDich.getMaVi(), dbHelper);
-        TietKiem tietKiem = CheckPropertyRepeatModule.checkSavings(soGiaoDich.getMaTietKiem(), dbHelper);
-        SuKien suKien = CheckPropertyRepeatModule.checkEvent(soGiaoDich.getMaSuKien(), dbHelper);
-        EventSaveTemplate.handlingSaveTransRepeat(dbHelper, String.valueOf(soGiaoDich.getSoTien()), soGiaoDich.getGhiChu(),
-                dateNew, danhMuc, viCaNhan, tietKiem, suKien, "", soGiaoDich.getLapLai(), activity, idNew, soGiaoDichNew);
-        soGiaoDich.setLapLai("");
-        dbHelper.update_SoGiaoDich(soGiaoDich);
-    }
 }

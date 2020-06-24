@@ -1,6 +1,7 @@
 package com.example.financial_savings.controllers.budgets;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,8 +17,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.financial_savings.R;
 import com.example.financial_savings.entities.NganSach;
+import com.example.financial_savings.entities.SoGiaoDich;
 import com.example.financial_savings.helper.DBHelper;
 import com.example.financial_savings.interfaces.IMappingView;
+import com.example.financial_savings.modules.alarms.AlarmRemindModule;
 import com.example.financial_savings.modules.checks.CheckEmptyModule;
 import com.example.financial_savings.modules.dates.DateDisplayModule;
 import com.example.financial_savings.modules.dates.DateGetStringModule;
@@ -62,8 +65,6 @@ public class AddBudgetsActivity extends AppCompatActivity implements IMappingVie
                     if(money.length() > 3 && money.substring(money.length() - 3).equals("000")) {
                         if(Double.parseDouble(money) >= 300000) {
                             if(checkdate(sqlStart.toString(),sqlEnd.toString())){
-//                                Date sqlStart = DateFormatModule.getDateSQL(timeStart);
-//                                Date sqlEnd = DateFormatModule.getDateSQL(timeEnd);
                                 handlingSave(sqlStart, sqlEnd, money);
                             } else Toast.makeText(getApplicationContext(), R.string.condition_timee, Toast.LENGTH_SHORT).show();
                         } else Toast.makeText(getApplicationContext(), R.string.condition_money, Toast.LENGTH_SHORT).show();

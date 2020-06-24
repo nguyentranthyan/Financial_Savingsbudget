@@ -31,11 +31,11 @@ import java.util.Date;
 public class DetailBudgetsActivity extends AppCompatActivity implements IMappingView{
     private Button buttonSeeTrans;
     private ImageButton buttonCancel, buttonEdit, buttonDelete;
-    private TextView editTextDate, editTextMoney, money_rest,moneyEveryDate, expectedmoneyspent, actualspending, editTextDayRest,excessiveamount;
+    private TextView editTextDate, editTextMoney, money_rest,moneyEveryDate, expectedmoneyspent, actualmoneyspending, editTextDayRest,excessiveamount;
     private DBHelper dbHelper;
     private NganSach nganSach;
     private String idBudgets;
-//    LineGraphSeries<DataPoint> series;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +95,7 @@ public class DetailBudgetsActivity extends AppCompatActivity implements IMapping
             }
         });
     }
+
     @SuppressLint("SetTextI18n")
     private void loadData() {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
@@ -106,16 +107,18 @@ public class DetailBudgetsActivity extends AppCompatActivity implements IMapping
             editTextMoney.setCompoundDrawablesWithIntrinsicBounds(R.drawable.money_goal, 0, 0, 0);
             editTextDate.setText(formatter.format(nganSach.getNgayBatDau()) + " - " + formatter.format(nganSach.getNgayKetThuc()));
 
-            int tongsongay = DateBetweenModule.daysBetween(nganSach.getNgayKetThuc(), nganSach.getNgayBatDau());
-            int songayconlai = DateBetweenModule.daysBetween(nganSach.getNgayKetThuc(), new Date(Calendar.getInstance().getTime().getTime()));
-            int songaydachi = tongsongay - songayconlai;
-
-            int money = (int) (MoneyBudgetModule.getMoneyRestBudget(dbHelper, nganSach) / songayconlai);
-            int totalMoneyExpenses = (int) MoneyBudgetModule.getTotalMoneyExpenses(dbHelper, idBudgets);
-            int moneyspending = (totalMoneyExpenses / songaydachi);
-            int expectMoneySpent = moneyspending * tongsongay;
-
+            int totalDate= DateBetweenModule.daysBetween(nganSach.getNgayKetThuc(), nganSach.getNgayBatDau());
+            int daterest = DateBetweenModule.daysBetween(nganSach.getNgayKetThuc(), new Date(Calendar.getInstance().getTime().getTime()));
+            int datespending = totalDate - daterest;
             String moneyrest = FormatMoneyModule.formatAmount(MoneyBudgetModule.getMoneyRestBudget(dbHelper, nganSach));
+            int totalMoneyExpenses = (int) MoneyBudgetModule.getTotalMoneyExpenses(dbHelper, idBudgets);
+
+            //so tien nen chi moi ngay = tổng số tiền còn lại chia số ngày còn lai
+            int money = (int) (MoneyBudgetModule.getMoneyRestBudget(dbHelper, nganSach) / daterest);
+            //so tien thuc te chi = số tiền da chi chia cho so ngay da chi
+            int actualmoneyspent = (totalMoneyExpenses / datespending);
+            //so tien du kien chi tieu = so tien thuc te chi * tong so ngay
+            int expectMoneySpent = actualmoneyspent * totalDate;
 
             int tongtien=0;
             ArrayList<ChiTietNganSach> listbudget = dbHelper.getByIDBudget_ChiTietNganSach(nganSach.getMaNganSach());
@@ -123,27 +126,23 @@ public class DetailBudgetsActivity extends AppCompatActivity implements IMapping
                 SoGiaoDich giaoDich = dbHelper.getByID_SoGiaoDich(listbudget.get(i1).getMaGiaoDich());
                 int tien = (int) giaoDich.getSoTien();
                 tongtien += tien;
-
             }
             if(nganSach.getSoTien()<tongtien){
-                excessiveamount.setText(moneyrest+"VND");
+                excessiveamount.setText("-"+moneyrest+"VND");
                 money_rest.setText("0");
+                moneyEveryDate.setText("0");
+                editTextDayRest.setText("Còn lại " + daterest + " ngày");
+                actualmoneyspending.setText(FormatMoneyModule.formatAmount(actualmoneyspent) + " VND");
+                expectedmoneyspent.setText(FormatMoneyModule.formatAmount(expectMoneySpent) + " VND");
             }
             else{
                 excessiveamount.setText("0");
                 money_rest.setText(moneyrest+"VND");
+                editTextDayRest.setText("Còn lại " + daterest + " ngày");
+                moneyEveryDate.setText(FormatMoneyModule.formatAmount(money) + " VND");
+                actualmoneyspending.setText(FormatMoneyModule.formatAmount(actualmoneyspent) + " VND");
+                expectedmoneyspent.setText(FormatMoneyModule.formatAmount(expectMoneySpent) + " VND");
             }
-
-            editTextDayRest.setText("Còn lại " + songayconlai + " ngày");
-
-            //so tien nen chi moi ngay = tổng số tiền còn lại chia số ngày còn lai
-            moneyEveryDate.setText(FormatMoneyModule.formatAmount(money) + " VND");
-
-            //so tien thuc te chi = số tiền da chi chia cho so ngay da chi
-            actualspending.setText(FormatMoneyModule.formatAmount(moneyspending) + " VND");
-
-            //so tien du kien chi tieu = so tien thuc te chi * tong so ngay
-            expectedmoneyspent.setText(FormatMoneyModule.formatAmount(expectMoneySpent) + " VND");
         }
     }
 
@@ -182,7 +181,7 @@ public class DetailBudgetsActivity extends AppCompatActivity implements IMapping
         money_rest=findViewById(R.id.money_rest);
         excessiveamount=findViewById(R.id.excessiveamount);
         expectedmoneyspent = findViewById(R.id.Expectedmoneyspent);
-        actualspending = findViewById(R.id.actualspending);
+        actualmoneyspending = findViewById(R.id.actualspending);
         dbHelper = new DBHelper(this);
         getSupportActionBar().hide();
     }

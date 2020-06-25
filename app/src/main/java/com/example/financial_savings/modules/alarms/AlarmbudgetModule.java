@@ -10,6 +10,7 @@ import android.util.Log;
 import com.example.financial_savings.R;
 import com.example.financial_savings.entities.NganSach;
 import com.example.financial_savings.helper.DBHelper;
+import com.example.financial_savings.modules.formats.FormatMoneyModule;
 import com.example.financial_savings.notifications.NotifierAlarm_budget;
 
 import java.util.Calendar;
@@ -19,22 +20,27 @@ import java.util.TimeZone;
 import static android.content.ContentValues.TAG;
 
 public class AlarmbudgetModule {
-    public static void handlingAlarmRepeat_Date_budget(java.sql.Date dateNew, Context activity, NganSach nganSach, DBHelper dbHelper) {
+    public static void handlingAlarmRepeat_Date_budget(java.sql.Date dateNew, Context activity, NganSach nganSach, DBHelper dbHelper,int code) {
         Calendar calendarDate = Calendar.getInstance();
         calendarDate.setTime(dateNew);
         int year = calendarDate.get(Calendar.YEAR);
         int month = calendarDate.get(Calendar.MONTH) ;
         int dayOfMonth = calendarDate.get(Calendar.DAY_OF_MONTH);
-        handlingAlarmRepeat_TimeZonebudget(year, month, dayOfMonth, activity, nganSach, dbHelper, dateNew);
+        handlingAlarmRepeat_TimeZonebudget(year, month, dayOfMonth, activity, nganSach, dbHelper, dateNew,code);
     }
     private static void handlingAlarmRepeat_TimeZonebudget(int year, int month, int dayOfMonth, Context activity,
-                                                           NganSach nganSach, DBHelper dbHelper, java.sql.Date dateNew) {
-
-        final String TITLE = activity.getResources().getString(R.string.repeat_title_budget);
-        final String MESSAGE = activity.getResources().getString(R.string.repeat_message_budget);
+                                                           NganSach nganSach, DBHelper dbHelper, java.sql.Date dateNew,int code) {
+        String TITLE=" ",MESSAGE=" ",message=" ";
         final String DETAILS = activity.getResources().getString(R.string.alarm_detail);
-
-        final String message = MESSAGE + ". " + DETAILS;
+        if(code==0){
+              TITLE = activity.getResources().getString(R.string.repeat_title_budget);
+              MESSAGE = activity.getResources().getString(R.string.repeat_message_budget);
+            message = MESSAGE + ". " + DETAILS;
+        }else if(code==1){
+            TITLE = activity.getResources().getString(R.string.repeat_budget);
+            MESSAGE = activity.getResources().getString(R.string.repeat_mess_budget);
+            message = MESSAGE + ": $ " + FormatMoneyModule.formatAmount(nganSach.getSoTien()) + ". " + DETAILS;
+        }
 
         Calendar newDate = Calendar.getInstance();
         newDate.set(year, month, dayOfMonth);

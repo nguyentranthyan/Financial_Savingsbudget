@@ -41,7 +41,8 @@
     <!--Notification_budget-->
     <string name="repeat_title_budget">Cảnh báo</string>
     <string name="repeat_message_budget">Giao dịch của bạn đã vượt quá ngân sách cho phép</string>
-
+    <string name="repeat_budget">Chi tiêu kết thúc</string>
+    <string name="repeat_mess_budget">Chi tiêu của bạn đã kết thúc vào ngày hôm nay. Thông báo cho chi tiêu</string>
 
     <!--Notification_First-->
     <string name="first_title">Chào mừng bạn mới</string>

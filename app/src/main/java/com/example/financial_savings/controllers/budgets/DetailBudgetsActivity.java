@@ -128,7 +128,7 @@ public class DetailBudgetsActivity extends AppCompatActivity implements IMapping
                 tongtien += tien;
             }
             if(nganSach.getSoTien()<tongtien){
-                excessiveamount.setText("-"+moneyrest+"VND");
+                excessiveamount.setText(moneyrest+"VND");
                 money_rest.setText("0");
                 moneyEveryDate.setText("0");
                 editTextDayRest.setText("Còn lại " + daterest + " ngày");

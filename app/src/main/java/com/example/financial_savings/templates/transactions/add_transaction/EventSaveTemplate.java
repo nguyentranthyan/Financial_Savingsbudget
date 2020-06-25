@@ -330,7 +330,7 @@ public class EventSaveTemplate {
                         String dateStr=year+"-"+month+"-"+date;
                         Log.d("time", tongtien+"");
                         Log.d("money", nganSach.getSoTien()+"");
-                        AlarmbudgetModule.handlingAlarmRepeat_Date_budget(java.sql.Date.valueOf(dateStr), activity, nganSach, dbHelper);
+                        AlarmbudgetModule.handlingAlarmRepeat_Date_budget(java.sql.Date.valueOf(dateStr), activity, nganSach, dbHelper,0);
                     }
                 }
             }

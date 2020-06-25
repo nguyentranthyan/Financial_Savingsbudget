@@ -21,6 +21,8 @@ import com.example.financial_savings.entities.SoGiaoDich;
 import com.example.financial_savings.helper.DBHelper;
 import com.example.financial_savings.interfaces.IMappingView;
 import com.example.financial_savings.modules.alarms.AlarmRemindModule;
+import com.example.financial_savings.modules.alarms.AlarmRepeatModule;
+import com.example.financial_savings.modules.alarms.AlarmbudgetModule;
 import com.example.financial_savings.modules.checks.CheckEmptyModule;
 import com.example.financial_savings.modules.dates.DateDisplayModule;
 import com.example.financial_savings.modules.dates.DateGetStringModule;
@@ -91,6 +93,7 @@ public class AddBudgetsActivity extends AppCompatActivity implements IMappingVie
         nganSach.setSoTien(Double.parseDouble(money));
         nganSach.setNgayKetThuc(sqlEnd);
         dbHelper.insert_NganSach(nganSach);
+        AlarmbudgetModule.handlingAlarmRepeat_Date_budget(sqlEnd, AddBudgetsActivity.this,nganSach,dbHelper,1);
         onBackPressed();
         Toast.makeText(getApplicationContext(), R.string.success_budgets_add, Toast.LENGTH_SHORT).show();
     }
